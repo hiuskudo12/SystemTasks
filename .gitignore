@@ -1,0 +1,18 @@
+# Bỏ qua thư mục thư viện của Node.js (cực kỳ nặng, không được push lên)
+**/node_modules/
+
+# Bỏ qua các file cấu hình bảo mật, mật khẩu, tài khoản gửi mail Gmail
+**/.env
+**/.env.local
+
+# Bỏ qua các file log hệ thống khi chạy thử bị lỗi
+**/logs/
+**/*.log
+
+# Bỏ qua các file rác của hệ điều hành tự sinh ra
+.DS_Store
+Thumbs.db
+
+# Bỏ qua thư mục môi trường ảo nếu bạn có dùng Python ở backend
+**/venv/
+**/.venv/
