@@ -152,7 +152,7 @@ exports.updateTask = async (req, res) => {
 };
 
 exports.updateStatus = async (req, res) => {
-    console.log("req.body =", req.body);
+
     try {
 
         const result = await taskService.updateStatus(

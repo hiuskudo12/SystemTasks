@@ -250,22 +250,6 @@ console.log("user_id:", user_id);
 
 exports.updateStatus = async (task_id, user_id, status) => {
 
-    const allowStatus = [
-
-        "pending",
-
-        "completed",
-
-        "skipped"
-
-    ];
-
-    if (!allowStatus.includes(status)) {
-
-        throw new Error("Invalid task status");
-
-    }
-
     const pool = await poolPromise;
 
     const result = await pool.request()
@@ -277,38 +261,30 @@ exports.updateStatus = async (task_id, user_id, status) => {
         .input("status", sql.VarChar, status)
 
         .query(`
-
             UPDATE Tasks
 
             SET
-
-                status=@status,
-
-                updated_at=GETDATE()
+                status = @status,
+                updated_at = GETDATE()
 
             OUTPUT INSERTED.*
 
             WHERE
-
-                task_id=@task_id
-
-            AND
-
-                user_id=@user_id
-
+                task_id = @task_id
+                AND user_id = @user_id
         `);
 
-    if(result.recordset.length===0){
+    if (result.recordset.length === 0) {
 
         throw new Error("Task not found");
 
     }
 
-    return{
+    return {
 
-        message:"Task status updated successfully",
+        message: "Status updated successfully",
 
-        task:result.recordset[0]
+        task: result.recordset[0]
 
     };
 

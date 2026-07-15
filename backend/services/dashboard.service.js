@@ -21,13 +21,13 @@ exports.getDashboard = async (user_id) => {
                 SUM(CASE WHEN status='skipped' THEN 1 ELSE 0 END) AS skippedTasks,
 
                 SUM(
-                    CASE
-                        WHEN deadline < GETDATE()
-                        AND status='pending'
-                        THEN 1
-                        ELSE 0
-                    END
-                ) AS overdueTasks
+    CASE
+        WHEN CAST(deadline AS DATE) < CAST(GETDATE() AS DATE)
+        AND status = 'pending'
+        THEN 1
+        ELSE 0
+    END
+) AS overdueTasks
 
             FROM Tasks
 
