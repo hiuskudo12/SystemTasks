@@ -188,19 +188,24 @@ return {
 
 exports.updateTask = async (task_id, user_id, taskData) => {
 
+console.log("task_id:", task_id);
+console.log("user_id:", user_id);
+
     const pool = await poolPromise;
 
     const {
-
         title,
-
         description,
-
         priority,
-
-        deadline
-
+        deadline,
     } = taskData;
+
+    console.log({
+    title,
+    description,
+    priority,
+    deadline,
+});
 
     const result = await pool.request()
 
@@ -217,45 +222,28 @@ exports.updateTask = async (task_id, user_id, taskData) => {
         .input("deadline", sql.DateTime, deadline)
 
         .query(`
-
             UPDATE Tasks
-
             SET
-
-                title=@title,
-
-                description=@description,
-
-                priority=@priority,
-
-                deadline=@deadline,
-
-                updated_at=GETDATE()
+                title = @title,
+                description = @description,
+                priority = @priority,
+                deadline = @deadline,
+                updated_at = GETDATE()
 
             OUTPUT INSERTED.*
 
             WHERE
-
-                task_id=@task_id
-
-            AND
-
-                user_id=@user_id
-
+                task_id = @task_id
+                AND user_id = @user_id
         `);
-
-    if(result.recordset.length===0){
-
+            console.log(result.recordset);
+    if (result.recordset.length === 0) {
         throw new Error("Task not found");
-
     }
 
-    return{
-
-        message:"Task updated successfully",
-
-        task:result.recordset[0]
-
+    return {
+        message: "Task updated successfully",
+        task: result.recordset[0],
     };
 
 };
@@ -331,39 +319,21 @@ exports.deleteTask = async (task_id, user_id) => {
     const pool = await poolPromise;
 
     const result = await pool.request()
-
         .input("task_id", sql.Int, task_id)
-
         .input("user_id", sql.Int, user_id)
-
         .query(`
-
             DELETE FROM Tasks
-
-            OUTPUT DELETED.task_id
-
-            WHERE
-
-                task_id=@task_id
-
-            AND
-
-                user_id=@user_id
-
+            OUTPUT DELETED.*
+            WHERE task_id = @task_id
+            AND user_id = @user_id
         `);
 
     if (result.recordset.length === 0) {
-
         throw new Error("Task not found");
-
     }
 
     return {
-
-        message: "Task deleted successfully",
-
-        data: result.recordset[0]
-
+        message: "Task deleted successfully"
     };
 
 };

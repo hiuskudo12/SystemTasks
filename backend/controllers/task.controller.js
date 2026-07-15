@@ -143,7 +143,7 @@ exports.updateTask = async (req, res) => {
 
             error.message,
 
-            404
+            400
 
         );
 
@@ -152,7 +152,7 @@ exports.updateTask = async (req, res) => {
 };
 
 exports.updateStatus = async (req, res) => {
-
+    console.log("req.body =", req.body);
     try {
 
         const result = await taskService.updateStatus(
@@ -196,33 +196,21 @@ exports.deleteTask = async (req, res) => {
     try {
 
         const result = await taskService.deleteTask(
-
             req.params.id,
-
             req.user.user_id
-
         );
 
         return response.success(
-
             res,
-
-            result.message,
-
-            result.data
-
+            result.message
         );
 
     } catch (error) {
 
         return response.error(
-
             res,
-
             error.message,
-
-            404
-
+            400
         );
 
     }
